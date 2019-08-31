@@ -8,10 +8,6 @@
     <Compile Include="DatabaseHelper.fs" />
     <Compile Include="Recipes.fs" />
     <Compile Include="Program.fs" />
-    <None Include="web.config" />
-    <Content Include="WebRoot/**/*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.*" />
