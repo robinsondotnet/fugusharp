@@ -9,6 +9,7 @@ open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open fugusharp.Controllers.Recipes
+open fugusharp.Data.DatabaseHelper
 
 // ---------------------------------
 // Models
@@ -27,8 +28,17 @@ let webApp =
     choose [
         subRoute "/api"
             (choose [
-                route "/recipes" >=> (choose [
-                    GET >=> getRecipesHandler
+                GET >=> (choose [
+                    route "/recipes" >=> getRecipesHandler
+                ]) 
+                POST >=> (choose [
+                    route "/recipes" >=> postRecipesHandler
+                ])
+                PUT >=> (choose [
+                    routef "/recipes/%i" putRecipesHandler
+                ])
+                DELETE >=> (choose [
+                    routef "/recipes/%i" deleteRecipesHandler
                 ])
             ])
         setStatusCode 404 >=> text "Not Found" ]
@@ -64,6 +74,7 @@ let configureApp (app : IApplicationBuilder) =
 let configureServices (services : IServiceCollection) =
     services.AddCors()    |> ignore
     services.AddGiraffe() |> ignore
+    services.AddTransient<IDatabaseHelper, Neo4jDatabaseHelper>() |> ignore
 
 let configureLogging (builder : ILoggingBuilder) =
     builder.AddFilter(fun l -> l.Equals LogLevel.Error)
